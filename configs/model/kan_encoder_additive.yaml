@@ -1,0 +1,7 @@
+model: kan_encoder_additive
+
+in_dim: 1
+control_dim: 1
+out_dim: 1
+latent_dim: 4
+hidden_dim: 16

@@ -1,0 +1,8 @@
+model: multiplicative
+
+in_dim: 1
+control_dim: 1
+out_dim: 1
+hidden_dim: 64
+latent_dim: 4
+latent_act: swish

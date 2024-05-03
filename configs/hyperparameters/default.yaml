@@ -1,0 +1,11 @@
+# What metrics to evaluate on
+metrics:
+  - recon_mse
+  - recon_mape
+
+# Batch size
+batch_size: 5
+
+# Learning rate and cosine annealing scheduler
+gradient_clip: 5
+learning_rate: 5e-4

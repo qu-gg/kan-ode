@@ -1,0 +1,5 @@
+# Number of steps per task
+num_steps: 1251
+
+# How often to log metrics
+log_interval: 50

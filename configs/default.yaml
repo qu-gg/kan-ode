@@ -1,0 +1,31 @@
+defaults:
+  - _self_
+  - model: kan_encoder_additive
+  - dataset: default
+  - training: default
+  - hyperparameters: default
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+# PyTorch-Lightning hardware params
+accelerator: gpu
+devices: [0]
+num_workers: 0
+
+# Random seed of the run
+seed: 125125125
+
+# Experiment folder naming
+exptype: ${seed}_${dataset.func_type}_${model.model}
+model_path: ""
+checkpt: ""
+
+# For training, overrideable by cmd
+train: true
+resume: false
+
+# Whether to save reconstructions to disk
+save_files: true

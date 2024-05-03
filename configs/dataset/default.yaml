@@ -1,0 +1,11 @@
+func_type: multiplicative
+
+num_samples: 100
+timesteps: 20
+
+u_start: -5
+u_end: 5
+
+extrapolation_bound_window: 10
+bound_start: 30
+bound_end: 50
