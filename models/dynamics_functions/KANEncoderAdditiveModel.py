@@ -28,10 +28,14 @@ class AdditiveModel(LatentDynamicsModel):
         """ Latent dynamics as parameterized by a global deterministic neural ODE """
         super().__init__(args)
         self.encoder = nn.Linear(args.in_dim + args.control_dim, args.latent_dim).float().to(args.devices[0])
+        self.encoder_act = nn.LeakyReLU(0.1)
         self.decoder = nn.Linear(args.latent_dim, args.in_dim).float().to(args.devices[0])
 
         # ODE-Net which holds mixture logic
         self.dynamics_func = ODEFunction(args)
+
+        # Align the grid for the first N iterations
+        self.first_grid_flag = True
 
     def forward(self, x, u, generation_len):
         """ Forward function of the ODE network """
@@ -39,7 +43,12 @@ class AdditiveModel(LatentDynamicsModel):
         t = torch.linspace(1, self.args.timesteps, self.args.timesteps, device='cuda')
 
         # Get z0
-        z0 = self.encoder(torch.concatenate((x[:, 0], u), dim=-1))
+        z0 = self.encoder_act(self.encoder(torch.concatenate((x[:, 0], u), dim=-1)))
+
+        # Update the grid
+        if self.first_grid_flag is True:
+            self.dynamics_func.dynamics_net.update_grid_from_samples(z0)
+            self.first_grid_flag = False
 
         # Integrate and output
         pred = odeint(self.dynamics_func, z0, t)
