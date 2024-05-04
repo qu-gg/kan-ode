@@ -3,4 +3,4 @@ model: kan_additive
 in_dim: 1
 control_dim: 1
 out_dim: 1
-hidden_dim: 16
+hidden_dim: 6

@@ -54,7 +54,7 @@ class LatentDynamicsModel(pytorch_lightning.LightningModule):
 
     def configure_optimizers(self):
         """ By default, we assume a optim with the Adam Optimizer """
-        optim = torch.optim.AdamW(self.parameters(), lr=self.args.learning_rate)
+        optim = torch.optim.SGD(self.parameters(), lr=self.args.learning_rate)
         return optim
 
     def on_train_start(self):

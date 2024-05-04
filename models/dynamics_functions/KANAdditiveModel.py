@@ -17,7 +17,11 @@ class ODEFunction(nn.Module):
         super().__init__()
         self.args = args
 
-        self.dynamics_net = NumericKAN(width=[args.in_dim + args.control_dim, args.hidden_dim, args.in_dim], device=args.devices[0])
+        self.dynamics_net = NumericKAN(
+            width=[args.in_dim + args.control_dim, args.hidden_dim, args.in_dim],
+            base_fun=torch.nn.Tanh(),
+            device=args.devices[0]
+        )
 
     def set_control(self, control):
         self.controls = control
@@ -44,7 +48,8 @@ class AdditiveModel(LatentDynamicsModel):
         self.dynamics_func.set_control(u)
 
         # Update the grid
-        self.dynamics_func.dynamics_net.update_grid_from_samples(torch.concatenate((x[:, 0], u), dim=-1))
+        if self.n_updates < 50:
+            self.dynamics_func.dynamics_net.update_grid_from_samples(torch.concatenate((x[:, 0], u), dim=-1))
 
         # Integrate and output
         pred = odeint(self.dynamics_func, x[:, 0], t, method='rk4')

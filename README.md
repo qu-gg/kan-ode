@@ -1,5 +1,5 @@
-# kan-ode
-Rough experiments on using Kolmogorov-Arnold Networks (KANs) as the replacement layers in a latent dynamics function, e.g. as the layers of a neural ODE.
+# kan-ode [WIP]
+Rough exploratory experiments on using Kolmogorov-Arnold Networks (KANs) as the replacement layers in a latent dynamics function, e.g. as the layers of a neural ODE.
 
 ### Data:
 We'll consider two types of simple 1-dimensional ODE functions - influenced by 
@@ -14,6 +14,14 @@ can result in system identification properties given its sparsity and symbolic r
 ![img.png](figures/img.png)
 
 Later potential systems to consider will be higher dimensional Hamiltonian systems like Bouncing Ball, Pendulum, Lotka-Volterra, etc etc.
+These are honestly more interesting and valuable but I want to get the former system done because its (seemingly) simpler.
+
+
+### To-Do
+- Do a sweep over parameter configurations to get an intuition in hyperparameters vs convergence
+- Try out different optimizers (AdamW, SGD, LGBFS,...), noting their differences
+- Implement the plotting functions and the PySR functions from the original repo and run them on a successful model
+- Leverage other neural ssm works data that are high-dimensional projections of Hamiltonian systems in order to check if the latent representation aligns with the true underlying system
 
 ### Notes:
 Honestly unsure how much time/effort I'll put into this repo but happy for any discussions on the matter.
@@ -28,17 +36,33 @@ If you're unfamiliar with the realm of neural SSMs or sequential latent variable
 
 
 ### Results:
-Thus far in experiments I've noticed the necessity of using a linear transformation into a latent space (e.g. 2D data space -> 4D latent space), 
-otherwise the method has an incredibly high initial loss and won't optimize well under Adam.
+Thus far in experiments I've noticed the choice of activation function having a huge effect on the resulting convergence, as well
+as the number of nodes in the hidden layer. For the 1D functions, the default SiLU resulted in initial losses upwards of 1e+7, scaling
+heavily with node count. Sigmoid managed to converge ok but had a magnitude difference in the resulting metrics (MLP 1e-3 vs KANSigmoid 4e-2).
 
 I haven't done much hyperparameter or initialization tuning so results may not be super meaningful yet.
 
-Here is an MLP converged (black GT, blue predictions):
-
+#### AdamW Optimizer
 ![reconstructedControls.png](experiments%2F125125125_multiplicative_additive%2Fadditive%2Fversion_0%2Ftest%2FreconstructedControls.png)
 
-And here is a data-space KAN:
+MLP converged (black GT, blue predictions):
+- MSE 0.001
+- MAPE 0.002
 
-![reconstructedControls.png](experiments%2F125125125_multiplicative_kan_additive%2Fkan_additive%2Fversion_0%2Ftest%2FreconstructedControls.png)
+![reconstructedControls.png](experiments%2F125125125_multiplicative_kan_additive%2Fkan_additive%2FAdamWoptimizer%2FSiLUactivation%2Ftest%2FreconstructedControls.png)
 
-I'm running a latent-space KAN currently and will post the results when it is done.
+Data-space KAN using SiLU as the base activation function:
+- MSE 158357.0
+- MAPE 0.999
+
+![reconstructedControls.png](experiments%2F125125125_multiplicative_kan_additive%2Fkan_additive%2FAdamWoptimizer%2FSIGMOIDactivation%2Ftest%2FreconstructedControls.png)
+
+Data-space KAN using Sigmoid:
+- MSE 0.049
+- MAPE 0.012
+
+![reconstructedControls.png](experiments%2F125125125_multiplicative_kan_additive%2Fkan_additive%2FAdamWoptimizer%2FTANHactivation%2Ftest%2FreconstructedControls.png)
+
+Data-space KAN using Tanh:
+- MSE 0.054
+- MAPE 0.012
