@@ -38,16 +38,16 @@ If you're unfamiliar with the realm of neural SSMs or sequential latent variable
 ### Results:
 Thus far in experiments I've noticed the choice of activation function having a huge effect on the resulting convergence, as well
 as the number of nodes in the hidden layer. For the 1D functions, the default SiLU resulted in initial losses upwards of 1e+7, scaling
-heavily with node count. Sigmoid managed to converge ok but had a magnitude difference in the resulting metrics (MLP 1e-3 vs KANSigmoid 4e-2).
+heavily with node count. Sigmoid and Tanh had both more stable initializations (likely due to their bounds) and converged closer.
 
 I haven't done much hyperparameter or initialization tuning so results may not be super meaningful yet.
 
 #### AdamW Optimizer
-![reconstructedControls.png](experiments%2F125125125_multiplicative_additive%2Fadditive%2Fversion_0%2Ftest%2FreconstructedControls.png)
+![reconstructedControls.png](experiments%2F125125125_multiplicative_additive%2Fadditive%2FAdamWoptimizer%2Ftest%2FreconstructedControls.png)
 
-MLP converged (black GT, blue predictions):
-- MSE 0.001
-- MAPE 0.002
+MLP converged (black pred, blue GT):
+- MSE 0.0010
+- MAPE 0.0019
 
 ![reconstructedControls.png](experiments%2F125125125_multiplicative_kan_additive%2Fkan_additive%2FAdamWoptimizer%2FSiLUactivation%2Ftest%2FreconstructedControls.png)
 
@@ -66,3 +66,5 @@ Data-space KAN using Sigmoid:
 Data-space KAN using Tanh:
 - MSE 0.054
 - MAPE 0.012
+
+#### SGD Optimizer

@@ -34,6 +34,7 @@ def main(cfg: DictConfig):
 
     # Input generation
     x_indices = np.random.randint(0, 25, size=20)
+    x_indices = np.array([12])
     dataset = SingleODEData(cfg, x_initials=x_indices[:cfg.in_dim], u_start=cfg.u_start, u_end=cfg.u_end)
     sampler = RandomSampler(data_source=dataset, replacement=True, num_samples=cfg.num_steps * cfg.batch_size)
     train_dataloader = DataLoader(dataset, batch_size=cfg.batch_size, sampler=sampler, num_workers=cfg.num_workers)

@@ -1,6 +1,6 @@
 defaults:
   - _self_
-  - model: kan_additive
+  - model: additive
   - dataset: default
   - training: default
   - hyperparameters: default

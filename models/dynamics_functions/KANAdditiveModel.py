@@ -19,7 +19,7 @@ class ODEFunction(nn.Module):
 
         self.dynamics_net = NumericKAN(
             width=[args.in_dim + args.control_dim, args.hidden_dim, args.in_dim],
-            base_fun=torch.nn.Tanh(),
+            base_fun=torch.nn.Sigmoid(),
             device=args.devices[0]
         )
 
